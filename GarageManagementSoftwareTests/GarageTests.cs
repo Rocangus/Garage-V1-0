@@ -55,5 +55,33 @@ namespace GarageManagementSoftware.Tests
             // Assert
             Assert.AreEqual(expectedCount, count);
         }
+
+        [TestMethod]
+        public void GarageCanHoldDifferentVehicleTypes()
+        {
+            // Arrange 
+            Garage<Vehicle> vehicles = new Garage<Vehicle>(5);
+            Aircraft seidy = new Aircraft("SE-IDY", "White", 3, 610, "Piper", "PA-28-161 Warrior II", "PA28", AircraftType.LandPlane, AircraftEngineType.Piston, 1);
+            Aircraft v22 = new Aircraft("168383", "Grey", 3, 15032, "Bell Boeing", "V-22 Osprey", "V22", AircraftType.Tiltrotor, AircraftEngineType.Turboprop, 2);
+            Motorcycle motorcycle = new Motorcycle("XYZ041", "Black", 2, 189, 599);
+            int count = 0;
+            int expectedCount = 3;
+
+            // Act
+            vehicles.ParkVehicle(seidy);
+            vehicles.ParkVehicle(v22);
+            vehicles.ParkVehicle(motorcycle);
+            foreach (var item in vehicles)
+            {
+                if (item != null)
+                {
+                    count++;
+                    Console.WriteLine(item.ToString());
+                }
+            }
+
+            // Assert
+            Assert.AreEqual(expectedCount, count);
+        }
     }
 }

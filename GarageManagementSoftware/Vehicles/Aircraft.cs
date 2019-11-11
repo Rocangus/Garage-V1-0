@@ -44,6 +44,9 @@ namespace GarageManagementSoftware.Vehicles
             return $"an aircraft, {Manufacturer} {Model}, registration {RegistrationNumber}, color {Color}, type designator {TypeDesignator}. It is {aircraftInformation.ToString()} with an empty mass of {EmptyMass}";
         }
 
-
+        public override string ToString()
+        {
+            return base.ToString() + ", an aircraft";
+        }
     }
 }
