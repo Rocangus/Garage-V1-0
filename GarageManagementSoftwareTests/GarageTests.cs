@@ -62,17 +62,19 @@ namespace GarageManagementSoftware.Tests
             // Arrange 
             Garage<Vehicle> vehicles = new Garage<Vehicle>(5);
             Aircraft seidy = new Aircraft("SE-IDY", "White", 3, 610, "Piper", "PA-28-161 Warrior II", "PA28", AircraftType.LandPlane, AircraftEngineType.Piston, 1);
-            Aircraft v22 = new Aircraft("168383", "Grey", 3, 15032, "Bell Boeing", "V-22 Osprey", "V22", AircraftType.Tiltrotor, AircraftEngineType.Turboprop, 2);
+            Bus bus = new Bus("ERB321", "Grey", 4, 7350, 15);
             Motorcycle motorcycle = new Motorcycle("XYZ041", "Black", 2, 189, 599);
             Car car = new Car("ABC123", "Red", 4, 1250, CarPropulsionType.Gasoline);
+            Boat boat = new Boat("SBR-485214", "Blue", 650, 4);
             int count = 0;
-            int expectedCount = 4;
+            int expectedCount = 5;
 
             // Act
             vehicles.ParkVehicle(seidy);
-            vehicles.ParkVehicle(v22);
+            vehicles.ParkVehicle(bus);
             vehicles.ParkVehicle(motorcycle);
             vehicles.ParkVehicle(car);
+            vehicles.ParkVehicle(boat);
             foreach (var item in vehicles)
             {
                 if (item != null)

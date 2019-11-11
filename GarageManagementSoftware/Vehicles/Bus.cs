@@ -14,7 +14,7 @@ namespace GarageManagementSoftware.Vehicles
 
         public override string ToString()
         {
-            return base.ToString() + ", a bus";
+            return base.ToString() + $", a bus that can hold {PassengerCapacity} passengers";
         }
     }
 }
