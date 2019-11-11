@@ -29,6 +29,37 @@ namespace GarageManagementSoftware
             return false;
         }
 
+        public bool UnparkVehicle(Vehicle toUnpark)
+        {
+            for(int i = 0; i < Count; i++)
+            {
+                var vehicle = vehicles[i];
+                if (vehicle.Equals(toUnpark))
+                {
+                    vehicles[i] = null;
+                    ShiftRemainingItemsLeft(i);
+                    Count--;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ShiftRemainingItemsLeft(int i)
+        {
+            while(i+1 < Count)
+            {
+                if (vehicles[i+1] != null)
+                {
+                    vehicles[i] = vehicles[i + 1];
+                    i++;
+                }
+                else
+                    break;
+            }
+            if (i < Count) vehicles[i] = null;
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             foreach (T item in vehicles)
