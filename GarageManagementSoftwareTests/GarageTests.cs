@@ -10,7 +10,7 @@ namespace GarageManagementSoftware.Tests
     public class GarageTests
     {
         [TestMethod()]
-        public void GarageTest()
+        public void GarageCanBeCreatedTest()
         { 
             // Arrange
             Garage<Vehicle> vehicles = new Garage<Vehicle>(5);
@@ -31,5 +31,12 @@ namespace GarageManagementSoftware.Tests
             Assert.AreEqual(expected1, vehicles1.Capacity);
             Assert.AreEqual(expected2, vehicles2.Capacity);
         }
+
+        [TestMethod]
+        public void GarageCanHoldAircraft()
+        {
+            Garage<Vehicle> vehicles = new Garage<Vehicle>(5);
+            
+        } 
     }
 }

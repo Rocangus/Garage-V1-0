@@ -19,6 +19,33 @@ namespace GarageManagementSoftware.Vehicles
             EmptyMass = emptymass;
         }
 
-        public abstract override string ToString();
+        /// <summary>
+        /// Returns the Registration number as the string representation of the Vehicle.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return RegistrationNumber;
+        }
+
+        /// <summary>
+        /// Equality based on registration number.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            if(obj == null || !(obj is Vehicle))
+            {
+                return false;
+            }
+            var vehicle = obj as Vehicle;
+            return RegistrationNumber.ToLower().Equals(vehicle.RegistrationNumber.ToLower());
+        }
+
+        public override int GetHashCode()
+        {
+            return RegistrationNumber.GetHashCode();
+        }
     }
-}
+} 

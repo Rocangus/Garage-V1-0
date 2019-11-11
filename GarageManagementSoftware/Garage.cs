@@ -18,6 +18,17 @@ namespace GarageManagementSoftware
             Count = 0;
         }
 
+        public bool ParkVehicle(Vehicle vehicle)
+        {
+            if(Count<Capacity)
+            {
+                vehicles[Count] = vehicle;
+                Count++;
+                return true;
+            }
+            return false;
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             foreach (T item in vehicles)

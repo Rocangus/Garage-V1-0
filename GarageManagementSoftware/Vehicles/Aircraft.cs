@@ -27,10 +27,9 @@ namespace GarageManagementSoftware.Vehicles
             EngineCount = engineCount;
         }
 
-        public override string ToString()
+        public string GetFullInfoAsString()
         {
             StringBuilder aircraftInformation = new StringBuilder();
-            
 
             if (TypeDescription == AircraftType.Amphibian)
             {
@@ -44,5 +43,7 @@ namespace GarageManagementSoftware.Vehicles
             aircraftInformation.Append($"with {EngineCount} {engineCountString} of type {Enum.GetName(typeof(AircraftEngineType), EngineType)}");
             return $"an aircraft, {Manufacturer} {Model}, registration {RegistrationNumber}, color {Color}, type designator {TypeDesignator}. It is {aircraftInformation.ToString()} with an empty mass of {EmptyMass}";
         }
+
+
     }
 }
