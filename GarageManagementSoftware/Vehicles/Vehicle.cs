@@ -9,12 +9,14 @@ namespace GarageManagementSoftware.Vehicles
         public string RegistrationNumber { get; protected set; }
         public string Color { get; protected set; }
         public int NumberOfWheels { get; protected set; }
+        public int EmptyMass { get; set; }
 
-        public Vehicle(string regnumber, string color, int numberofwheels)
+        public Vehicle(string regnumber, string color, int numberofwheels, int emptymass)
         {
             RegistrationNumber = regnumber;
             Color = color;
             NumberOfWheels = numberofwheels;
+            EmptyMass = emptymass;
         } 
     }
 }
