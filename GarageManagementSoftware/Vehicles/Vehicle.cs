@@ -17,6 +17,8 @@ namespace GarageManagementSoftware.Vehicles
             Color = color;
             NumberOfWheels = numberofwheels;
             EmptyMass = emptymass;
-        } 
+        }
+
+        public abstract override string ToString();
     }
 }
