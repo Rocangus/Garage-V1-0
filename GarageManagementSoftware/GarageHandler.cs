@@ -7,6 +7,7 @@ namespace GarageManagementSoftware
 {
     public class GarageHandler
     {
+
         public string ErrorMessage { get; set; }
         private Garage<Vehicle> garage;
         public GarageHandler()
@@ -263,5 +264,35 @@ namespace GarageManagementSoftware
             else
                 vehicleTypeCounts.Add(key, 1);
         }
+
+        public string[] ListVehicles()
+        {
+            if (garage == null)
+                return null;
+            var strings = new string[garage.Count];
+            int i = 0;
+            foreach (var vehicle in garage)
+            {
+                strings[i] = vehicle.ToString();
+                i++;
+            }
+            return strings;
+        }
+
+        public bool UnparkVehicle(string registrationNumber) // Needs testing
+        {
+            if (garage == null)
+                return false;
+            Vehicle vehicle = null;
+            foreach (var v in garage)
+            {
+                if (v.RegistrationNumber.ToLower().Equals(registrationNumber.ToLower()))
+                    vehicle = v;
+            }
+            if (vehicle != null)
+                return garage.UnparkVehicle(vehicle);
+            else
+                return false;
+        } 
     }
 }

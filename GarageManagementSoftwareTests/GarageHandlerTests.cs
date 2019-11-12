@@ -120,5 +120,31 @@ namespace GarageManagementSoftware.Tests
             // Assert
             Assert.AreEqual(1, handler.GetGarageVehicleCount());
         }
+
+        [TestMethod()]
+        public void ListVehiclesTest()
+        {
+            // Arrange
+            Garage<Vehicle> vehicles = new Garage<Vehicle>(5);
+            Aircraft seidy = new Aircraft("SE-IDY", "White", 3, 610, "Piper", "PA-28-161 Warrior II", "PA28", AircraftType.LandPlane, AircraftEngineType.Piston, 1);
+            Bus bus = new Bus("ERB321", "Grey", 4, 7350, 15);
+            Motorcycle motorcycle = new Motorcycle("XYZ041", "Black", 2, 189, 599);
+            Car car = new Car("ABC123", "Red", 4, 1250, CarPropulsionType.Gasoline);
+            Boat boat = new Boat("SBR-485214", "Blue", 650, 4);
+            vehicles.ParkVehicle(seidy);
+            vehicles.ParkVehicle(bus);
+            vehicles.ParkVehicle(motorcycle);
+            vehicles.ParkVehicle(car);
+            vehicles.ParkVehicle(boat);
+            string[] expectedStrings = new string[5] { "SE-IDY, an aircraft", "ERB321, a bus that can hold 15 passengers", "XYZ041, a motorcycle", "ABC123, a gasoline car", "SBR-485214, a boat 4 meters long" };
+            GarageHandler handler = new GarageHandler();
+            handler.SetGarage(vehicles);
+
+            // Act
+            var actualStrings = handler.ListVehicles();
+
+            // Assert
+            CollectionAssert.AreEquivalent(expectedStrings, actualStrings);
+        }
     }
 }
