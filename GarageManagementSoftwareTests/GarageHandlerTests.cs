@@ -61,7 +61,55 @@ namespace GarageManagementSoftware.Tests
         public void ParkBoatTest()
         {
             // Arrange
-            string input = "boat, SBR-485214, Blue, 650, 4";
+            string input = "boat, SBR-485214, Blue, 650, 4,34";
+            string[] splitInput = input.Split(", ");
+            GarageHandler handler = new GarageHandler();
+            handler.NewGarage(1);
+
+            // Act
+            handler.ParkVehicle(splitInput);
+
+            // Assert
+            Assert.AreEqual(1, handler.GetGarageVehicleCount());
+        }
+
+        [TestMethod()]
+        public void ParkBusTest()
+        {
+            // Arrange
+            string input = "bus, ERB321, Grey, 4, 7350, 15";
+            string[] splitInput = input.Split(", ");
+            GarageHandler handler = new GarageHandler();
+            handler.NewGarage(1);
+
+            // Act
+            handler.ParkVehicle(splitInput);
+
+            // Assert
+            Assert.AreEqual(1, handler.GetGarageVehicleCount());
+        }
+
+        [TestMethod()]
+        public void ParkCarTest()
+        {
+            // Arrange
+            string input = "car, ABC123, Red, 4, 1250, Gasoline";
+            string[] splitInput = input.Split(", ");
+            GarageHandler handler = new GarageHandler();
+            handler.NewGarage(1);
+
+            // Act
+            handler.ParkVehicle(splitInput);
+
+            // Assert
+            Assert.AreEqual(1, handler.GetGarageVehicleCount());
+        }
+
+        [TestMethod()]
+        public void ParkMotorcycleTest()
+        {
+            // Arrange
+            string input = "motorcycle, XYZ041, Black, 2, 189, 599";
             string[] splitInput = input.Split(", ");
             GarageHandler handler = new GarageHandler();
             handler.NewGarage(1);
