@@ -56,5 +56,21 @@ namespace GarageManagementSoftware.Tests
             // Assert
             Assert.AreEqual(1, handler.GetGarageVehicleCount());
         }
+
+        [TestMethod()]
+        public void ParkBoatTest()
+        {
+            // Arrange
+            string input = "boat, SBR-485214, Blue, 650, 4";
+            string[] splitInput = input.Split(", ");
+            GarageHandler handler = new GarageHandler();
+            handler.NewGarage(1);
+
+            // Act
+            handler.ParkVehicle(splitInput);
+
+            // Assert
+            Assert.AreEqual(1, handler.GetGarageVehicleCount());
+        }
     }
 }

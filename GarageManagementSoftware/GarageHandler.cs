@@ -59,6 +59,8 @@ namespace GarageManagementSoftware
                 {
                     case "aircraft":
                         return ParkAircraft(input);
+                    case "boat":
+                        return ParkBoat(input);
                     default:
                         return false;
                 }
@@ -84,6 +86,28 @@ namespace GarageManagementSoftware
                 return false;
             }
             var vehicle = new Aircraft(input[1], input[2], numberOfWheels, emptyMass, input[5], input[6], input[7], aircraftType, aircraftEngineType, engineCount);
+            if (garage.ParkVehicle(vehicle))
+                return true;
+            else
+                return false;
+        }
+
+        private bool ParkBoat(string[] input)
+        {
+            {
+                if (input.Length != 5)
+                {
+                    ErrorMessage = $"To add a boat you need to specify 5 values. {input.Length} values were found.";
+                    return false;
+                }
+            }
+            int emptyMass, length;
+            if (!int.TryParse(input[3], out length) || !int.TryParse(input[4], out emptyMass))
+            {
+                ErrorMessage = "Please make sure to enter numbers where requested.";
+                return false;
+            }
+            var vehicle = new Boat(input[1], input[2], emptyMass, length);
             if (garage.ParkVehicle(vehicle))
                 return true;
             else
