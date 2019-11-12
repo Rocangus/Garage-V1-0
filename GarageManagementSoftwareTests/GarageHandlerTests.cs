@@ -40,5 +40,21 @@ namespace GarageManagementSoftware.Tests
             CollectionAssert.AreEquivalent(actual, expected);
 
         }
+
+        [TestMethod()]
+        public void ParkAircraftTest()
+        {
+            // Arrange
+            string input = "aircraft, SE-IDY, White, 3, 610, Piper, PA-28-161 Warrior II, PA28, 0, 1, 1";
+            string[] splitInput = input.Split(", ");
+            GarageHandler handler = new GarageHandler();
+            handler.NewGarage(1);
+
+            // Act
+            handler.ParkVehicle(splitInput);
+
+            // Assert
+            Assert.AreEqual(1, handler.GetGarageVehicleCount());
+        }
     }
 }

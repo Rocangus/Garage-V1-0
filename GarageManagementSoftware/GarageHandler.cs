@@ -7,6 +7,7 @@ namespace GarageManagementSoftware
 {
     public class GarageHandler
     {
+        public string ErrorMessage { get; set; }
         private Garage<Vehicle> garage;
         public GarageHandler()
         {
@@ -45,6 +46,48 @@ namespace GarageManagementSoftware
             if (garage == null)
                 return -1;
             else return GetGarageCapacity() - GetGarageVehicleCount();
+        }
+
+        public bool ParkVehicle(string[] input)
+        {
+            if (garage == null)
+                return false;
+            else
+            {
+                var vehicleType = input[0].ToLower();
+                switch (vehicleType)
+                {
+                    case "aircraft":
+                        return ParkAircraft(input);
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        private bool ParkAircraft(string[] input)
+        {
+            {
+                if (input.Length != 11)
+                {
+                    ErrorMessage = $"To add an aircraft you need to specify 11 values. {input.Length} values were found.";
+                    return false;
+                }
+            }
+            int numberOfWheels, emptyMass, engineCount;
+            AircraftType aircraftType = (AircraftType)Enum.Parse(typeof(AircraftType), input[8]);
+            AircraftEngineType aircraftEngineType = (AircraftEngineType)Enum.Parse(typeof(AircraftEngineType), input[9]);
+            int.TryParse(input[10], out engineCount);
+            if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass) || !int.TryParse(input[10], out engineCount))
+            {
+                ErrorMessage = "Please make sure to enter numbers where requested.";
+                return false;
+            }
+            var vehicle = new Aircraft(input[1], input[2], numberOfWheels, emptyMass, input[5], input[6], input[7], aircraftType, aircraftEngineType, engineCount);
+            if (garage.ParkVehicle(vehicle))
+                return true;
+            else
+                return false;
         }
 
         public Dictionary<string, int> GetVehicleTypeCounts()
