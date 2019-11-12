@@ -64,7 +64,8 @@ namespace GarageManagementSoftware
         {
             foreach (T item in vehicles)
             {
-                yield return item;
+                if (item != null) 
+                    yield return item;
             }
         }
 

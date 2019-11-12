@@ -110,11 +110,8 @@ namespace GarageManagementSoftware.Tests
             vehicles.UnparkVehicle(seidy);
             foreach (var item in vehicles)
             {
-                if (item != null)
-                {
                     count++;
                     Console.WriteLine(item.ToString());
-                }
             }
 
             // Assert
