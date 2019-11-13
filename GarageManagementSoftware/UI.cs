@@ -40,9 +40,10 @@ namespace GarageManagementSoftware
                             }
                         }
                         break;
-                    case "3":
+                    case "5":
                         Console.WriteLine("Please specify a registration number to unpark:");
-
+                        var registrationNumber = Console.ReadLine();
+                        handler.UnparkVehicle(registrationNumber);
                         break;
                     default:
                         break;

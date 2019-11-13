@@ -117,5 +117,37 @@ namespace GarageManagementSoftware.Tests
             // Assert
             Assert.AreEqual(expectedCount, count);
         }
+
+        [TestMethod]
+        public void UnparkVehicleThroughGetByRegistrationNumberPerformsCorrectly()
+        {
+            // Arrange 
+            Garage<Vehicle> vehicles = new Garage<Vehicle>(5);
+            Aircraft seidy = new Aircraft("SE-IDY", "White", 3, 610, "Piper", "PA-28-161 Warrior II", "PA28", AircraftType.LandPlane, AircraftEngineType.Piston, 1);
+            Bus bus = new Bus("ERB321", "Grey", 4, 7350, 15);
+            Motorcycle motorcycle = new Motorcycle("XYZ041", "Black", 2, 189, 599);
+            Car car = new Car("ABC123", "Red", 4, 1250, CarPropulsionType.Gasoline);
+            Boat boat = new Boat("SBR-485214", "Blue", 650, 4);
+            vehicles.ParkVehicle(seidy);
+            vehicles.ParkVehicle(bus);
+            vehicles.ParkVehicle(motorcycle);
+            vehicles.ParkVehicle(car);
+            vehicles.ParkVehicle(boat);
+            int count = 0;
+            int expectedCount = 4;
+
+            // Act
+            Vehicle vehicle;
+            vehicles.GetVehicleByRegistrationNumber("se-idy", out vehicle);
+            vehicles.UnparkVehicle(vehicle);
+            foreach (var item in vehicles)
+            {
+                    count++;
+                    Console.WriteLine(item.ToString());
+            }
+
+            // Assert
+            Assert.AreEqual(expectedCount, count);
+        }
     }
 }

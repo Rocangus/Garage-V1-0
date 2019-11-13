@@ -60,12 +60,26 @@ namespace GarageManagementSoftware
             if (i < Count) vehicles[i] = null;
         }
 
+        public bool GetVehicleByRegistrationNumber(string registrationNumber, out Vehicle vehicle)
+        {
+            foreach (var item in this)
+            {
+                if (item.RegistrationNumber.ToLower().Equals(registrationNumber.ToLower()))
+                {
+                    vehicle = item;
+                    return true;
+                }
+            }
+            vehicle = null;
+            return false;
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (T item in vehicles)
+            for (int i = 0; i < Count; i++)
             {
-                if (item != null) 
-                    yield return item;
+                var item = (T) vehicles[i];
+                yield return item;
             }
         }
 

@@ -8,7 +8,7 @@ namespace GarageManagementSoftware
     public class GarageHandler
     {
 
-        public string ErrorMessage { get; set; }
+        public static List<string> errorMessages = new List<string>();
         private Garage<Vehicle> garage;
         public GarageHandler()
         {
@@ -74,13 +74,29 @@ namespace GarageManagementSoftware
             }
         }
 
-        
+        internal bool GetVehicleByRegistrationNumber(string registrationNumber, out Vehicle vehicle)
+        {
+            vehicle = null;
+            if (garage.GetVehicleByRegistrationNumber(registrationNumber, out vehicle))
+                return true;
+            else return false;
+        }
 
         private bool ParkAircraft(string[] input)
         {
+            Aircraft vehicle;
+            if (VehicleCreator.CreateAircraft(input, out vehicle)&&garage.ParkVehicle(vehicle))
+                return true;
+            else
+                return false;
+        }
+
+        public static bool CreateAircraft(string[] input, out Aircraft vehicle)
+        {
+            vehicle = null;
             if (input.Length != 11)
             {
-                ErrorMessage = $"To park an aircraft you need to specify 11 values. {input.Length} values were found.";
+                errorMessages.Add($"To park an aircraft you need to specify 11 values. {input.Length} values were found.");
                 return false;
             }
             int numberOfWheels, emptyMass, engineCount;
@@ -89,28 +105,25 @@ namespace GarageManagementSoftware
             int.TryParse(input[10], out engineCount);
             if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass) || !int.TryParse(input[10], out engineCount))
             {
-                ErrorMessage = "Please make sure to enter numbers where requested.";
+                errorMessages.Add("Please make sure to enter numbers where requested.");
                 return false;
             }
-            var vehicle = new Aircraft(input[1], input[2], numberOfWheels, emptyMass, input[5], input[6], input[7], aircraftType, aircraftEngineType, engineCount);
-            if (garage.ParkVehicle(vehicle))
-                return true;
-            else
-                return false;
+            vehicle = new Aircraft(input[1], input[2], numberOfWheels, emptyMass, input[5], input[6], input[7], aircraftType, aircraftEngineType, engineCount);
+            return true;
         }
 
         private bool ParkBoat(string[] input)
         {
             if (input.Length != 5)
             {
-                ErrorMessage = $"To park a boat you need to specify 5 values. {input.Length} values were found.";
+                errorMessages.Add($"To park a boat you need to specify 5 values. {input.Length} values were found.");
                 return false;
             }
             int emptyMass;
             decimal length;
             if (!decimal.TryParse(input[4], out length) || !int.TryParse(input[3], out emptyMass))
             {
-                ErrorMessage = "Please make sure to enter numbers where requested.";
+                errorMessages.Add("Please make sure to enter numbers where requested.");
                 return false;
             }
             var vehicle = new Boat(input[1], input[2], emptyMass, length);
@@ -124,13 +137,13 @@ namespace GarageManagementSoftware
         {
             if (input.Length != 6)
             {
-                ErrorMessage = $"To park a bus you need to specify 6 values. {input.Length} values were found.";
+                errorMessages.Add($"To park a bus you need to specify 6 values. {input.Length} values were found.");
                 return false;
             }
             int numberOfWheels, emptyMass, passengerCapacity;
             if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass) || !int.TryParse(input[5], out passengerCapacity))
             {
-                ErrorMessage = "Please make sure to enter numbers where requested.";
+                errorMessages.Add("Please make sure to enter numbers where requested.");
                 return false;
             }
             var vehicle = new Bus(input[1], input[2], numberOfWheels, emptyMass, passengerCapacity);
@@ -144,14 +157,14 @@ namespace GarageManagementSoftware
         {
             if (input.Length != 6)
             {
-                ErrorMessage = $"To park a car you need to specify 6 values. {input.Length} values were found.";
+                errorMessages.Add($"To park a car you need to specify 6 values. {input.Length} values were found.");
                 return false;
             }
             int numberOfWheels, emptyMass;
             CarPropulsionType propulsionType = (CarPropulsionType)Enum.Parse(typeof(CarPropulsionType), input[5]);
             if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass))
             {
-                ErrorMessage = "Please make sure to enter numbers where requested.";
+                errorMessages.Add("Please make sure to enter numbers where requested.");
                 return false;
             }
             var vehicle = new Car(input[1], input[2], numberOfWheels, emptyMass, propulsionType);
@@ -165,13 +178,13 @@ namespace GarageManagementSoftware
         {
             if (input.Length != 6)
             {
-                ErrorMessage = $"To park a motorcycle you need to specify 6 values. {input.Length} values were found.";
+                errorMessages.Add($"To park a motorcycle you need to specify 6 values. {input.Length} values were found.");
                 return false;
             }
             int numberOfWheels, emptyMass, cylinderVolume;
             if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass)||!int.TryParse(input[5], out cylinderVolume))
             {
-                ErrorMessage = "Please make sure to enter numbers where requested.";
+                errorMessages.Add("Please make sure to enter numbers where requested.");
                 return false;
             }
             var vehicle = new Motorcycle(input[1], input[2], numberOfWheels, emptyMass, cylinderVolume);
@@ -283,13 +296,8 @@ namespace GarageManagementSoftware
         {
             if (garage == null)
                 return false;
-            Vehicle vehicle = null;
-            foreach (var v in garage)
-            {
-                if (v.RegistrationNumber.ToLower().Equals(registrationNumber.ToLower()))
-                    vehicle = v;
-            }
-            if (vehicle != null)
+            Vehicle vehicle;
+            if (garage.GetVehicleByRegistrationNumber(registrationNumber, out vehicle))
                 return garage.UnparkVehicle(vehicle);
             else
                 return false;
