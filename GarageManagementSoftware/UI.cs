@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using GarageManagementSoftware.Vehicles;
+using System.Reflection;
 
 namespace GarageManagementSoftware
 {
@@ -24,15 +25,14 @@ namespace GarageManagementSoftware
             string input;
             do
             {
+                PrintMenuOptions();
                 input = Console.ReadLine();
                 switch (input)
                 {
                     case "1":
                         Console.WriteLine("Please enter the capacity of the garage.");
-                        var capacityString = Console.ReadLine();
-                        int capacity;
-                        if (int.TryParse(capacityString, out capacity))
-                            handler.NewGarage(capacity);
+                        int capacity = GetInteger(0, 1024);
+                        handler.NewGarage(capacity);
                         break;
                     case "2":
                         var vehicleStrings = handler.ListVehicles();
@@ -44,7 +44,7 @@ namespace GarageManagementSoftware
                             }
                         }
                         break;
-                    case "3":
+                    case "4":
                         StringBuilder builder = new StringBuilder();
                         builder.Append("Please select one of the following vehicle types: ");
                         var lastElement = vehicleTypes.Length - 1;
@@ -54,17 +54,9 @@ namespace GarageManagementSoftware
                         }
                         builder.Append(lastElement + ": " + vehicleTypes[lastElement]);
                         Console.WriteLine(builder.ToString());
-                        var vehicleTypeChoiceString = Console.ReadLine();
-                        int typeChoice;
-                        VehicleTypes type;
-                        if (int.TryParse(vehicleTypeChoiceString, out typeChoice))
-                        {
-                            if (Enum.IsDefined(typeof(VehicleTypes), typeChoice))
-                            {
-                                type = (VehicleTypes)typeChoice;
-                                type.ToString();
-                            }
-                        }
+                        int typeChoice = GetInteger(0, 4);
+                        PropertyInfo[] vehicleProperties = VehicleProperties.GetProperties(typeChoice);
+                        // ToDo: Figure out how to process the PropertyInfo array to get the right user input
                         break;
                     case "5":
                         Console.WriteLine("Please specify a registration number to unpark:");
@@ -75,6 +67,24 @@ namespace GarageManagementSoftware
                         break;
                 }
             } while (!input.ToLower().StartsWith("q"));
+        }
+
+        private int GetInteger(int min, int max)
+        {
+            int result = 0;
+            string input;
+            bool done = false;
+            while (!done)
+            {
+                input = Console.ReadLine();
+                if (int.TryParse(input, out result) && result >= min && result <= max)
+                {
+                    done = true;
+                    break;
+                }
+                Console.WriteLine($"Please enter an integer, minimum {min}, maximum {max}.");
+            }
+            return result;
         }
 
         private void PrintWelcomeMessage()

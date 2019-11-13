@@ -49,28 +49,29 @@ namespace GarageManagementSoftware
             else return GetGarageCapacity() - GetGarageVehicleCount();
         }
 
-        public bool ParkVehicle(string[] input)
+        public bool ParkVehicle(Vehicle vehicle)
         {
             if (garage == null)
                 return false;
             else
             {
-                var vehicleType = input[0].ToLower();
-                switch (vehicleType)
-                {
-                    case "aircraft":
-                        return ParkAircraft(input);
-                    case "boat":
-                        return ParkBoat(input);
-                    case "bus":
-                        return ParkBus(input);
-                    case "car":
-                        return ParkCar(input);
-                    case "motorcycle":
-                        return ParkMotorcycle(input);
-                    default:
-                        return false;
-                }
+                return garage.ParkVehicle(vehicle);
+                //var vehicleType = input[0].ToLower();
+                //switch (vehicleType)
+                //{
+                //    case "aircraft":
+                //        return ParkAircraft(input);
+                //    case "boat":
+                //        return ParkBoat(input);
+                //    case "bus":
+                //        return ParkBus(input);
+                //    case "car":
+                //        return ParkCar(input);
+                //    case "motorcycle":
+                //        return ParkMotorcycle(input);
+                //    default:
+                //        return false;
+                //}
             }
         }
 
