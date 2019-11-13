@@ -48,5 +48,19 @@ namespace GarageManagementSoftware.Vehicles
         {
             return base.ToString() + ", an aircraft";
         }
+
+        public void GetProp()
+        {
+            var dict = new Dictionary<int, Type>
+            {
+                {1, typeof(Aircraft) }
+            };
+
+            dict[1].GetProperties();
+            var props = this.GetType().GetProperties();
+            var propName = props[0].Name;
+            var propType = props[0].PropertyType;
+
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using GarageManagementSoftware.Vehicles;
 
 namespace GarageManagementSoftware
@@ -7,10 +9,12 @@ namespace GarageManagementSoftware
     public class UI
     {
         private GarageHandler handler;
+        private string[] vehicleTypes;
 
         public UI()
         {
             handler = new GarageHandler();
+            vehicleTypes = Enum.GetNames(typeof(VehicleTypes));
             MainMenu();
         }
 
@@ -37,6 +41,28 @@ namespace GarageManagementSoftware
                             foreach (var str in vehicleStrings)
                             {
                                 Console.WriteLine(str);
+                            }
+                        }
+                        break;
+                    case "3":
+                        StringBuilder builder = new StringBuilder();
+                        builder.Append("Please select one of the following vehicle types: ");
+                        var lastElement = vehicleTypes.Length - 1;
+                        for (int i = 0; i < lastElement; i++)
+                        {
+                            builder.Append(i + ": " + vehicleTypes[i] + ", ");
+                        }
+                        builder.Append(lastElement + ": " + vehicleTypes[lastElement]);
+                        Console.WriteLine(builder.ToString());
+                        var vehicleTypeChoiceString = Console.ReadLine();
+                        int typeChoice;
+                        VehicleTypes type;
+                        if (int.TryParse(vehicleTypeChoiceString, out typeChoice))
+                        {
+                            if (Enum.IsDefined(typeof(VehicleTypes), typeChoice))
+                            {
+                                type = (VehicleTypes)typeChoice;
+                                type.ToString();
                             }
                         }
                         break;
