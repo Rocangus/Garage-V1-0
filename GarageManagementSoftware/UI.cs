@@ -11,11 +11,20 @@ namespace GarageManagementSoftware
     {
         private GarageHandler handler;
         private string[] vehicleTypes;
+        private string[] aircraftTypes;
+        private string[] aircraftEngineTypes;
+        private string[] propulsionTypes;
+        private Type str = typeof(string);
+        private Type integer = typeof(int);
+        private Type dec = typeof(decimal);
 
         public UI()
         {
             handler = new GarageHandler();
             vehicleTypes = Enum.GetNames(typeof(VehicleTypes));
+            aircraftTypes = Enum.GetNames(typeof(AircraftType));
+            aircraftEngineTypes = Enum.GetNames(typeof(AircraftEngineType));
+            propulsionTypes = Enum.GetNames(typeof(CarPropulsionType));
             MainMenu();
         }
 
@@ -47,21 +56,52 @@ namespace GarageManagementSoftware
                     case "4":
                         StringBuilder builder = new StringBuilder();
                         builder.Append("Please select one of the following vehicle types: ");
-                        var lastElement = vehicleTypes.Length - 1;
-                        for (int i = 0; i < lastElement; i++)
-                        {
-                            builder.Append(i + ": " + vehicleTypes[i] + ", ");
-                        }
-                        builder.Append(lastElement + ": " + vehicleTypes[lastElement]);
+                        builder.Append(GetTypeString(vehicleTypes));
                         Console.WriteLine(builder.ToString());
                         int typeChoice = GetInteger(0, 4);
-                        PropertyInfo[] vehicleProperties = VehicleProperties.GetProperties(typeChoice);
+                        if (typeChoice == 0)
+                        {
+                            AircraftDTO aircraftDTO = new AircraftDTO();
+                            PopulateAircraftDTO(aircraftDTO);
+                            Aircraft aircraft;
+                            if (VehicleCreator.CreateAircraft(aircraftDTO, out aircraft))
+                            {
+                                if (handler.ParkVehicle(aircraft))
+                                    Console.WriteLine($"Vehicle {aircraft.RegistrationNumber} created and parked!");
+                            }
+                        }
+                        else if (typeChoice == 3)
+                        {
+
+                            Console.WriteLine(GetTypeString(propulsionTypes);
+                            int propulsionType = GetInteger(0, 6);
+                        }
+                        else
+                        {
+                            PropertyInfo[] vehicleProperties = VehicleProperties.GetProperties(typeChoice);
+                            Console.WriteLine(vehicleProperties[0].PropertyType.FullName);
+                            if (vehicleProperties[0].PropertyType.IsAssignableFrom(str))
+                            {
+                                Console.WriteLine("Can be assigned as a string.");
+                            }
+                            if (vehicleProperties[0].PropertyType.IsAssignableFrom(integer))
+                            {
+                                Console.WriteLine("Can be assigned as an integer.");
+                            }
+                            if (vehicleProperties[0].PropertyType.IsAssignableFrom(dec))
+                            {
+                                Console.WriteLine("Can be assigned as a decimal number.");
+                            }
+                        }
                         // ToDo: Figure out how to process the PropertyInfo array to get the right user input
                         break;
                     case "5":
                         Console.WriteLine("Please specify a registration number to unpark:");
                         var registrationNumber = Console.ReadLine();
-                        handler.UnparkVehicle(registrationNumber);
+                        if (handler.UnparkVehicle(registrationNumber))
+                            Console.WriteLine($"Vehicle {registrationNumber} unparked.");
+                        else
+                            Console.WriteLine($"No vehicle with registration number {registrationNumber} could be found.");
                         break;
                     default:
                         break;
@@ -69,7 +109,44 @@ namespace GarageManagementSoftware
             } while (!input.ToLower().StartsWith("q"));
         }
 
-        private int GetInteger(int min, int max)
+        private void PopulateAircraftDTO(AircraftDTO aircraftDTO)
+        {
+            Console.Write("Registration number: ");
+            aircraftDTO.RegistrationNumber = Console.ReadLine();
+            Console.Write("Color or livery: ");
+            aircraftDTO.ColorOrLivery = Console.ReadLine();
+            Console.Write("Empty mass in kilograms: ");
+            aircraftDTO.EmptyMass = GetInteger(0, int.MaxValue);
+            Console.Write("Number of landing gear assemblies: ");
+            aircraftDTO.NumberOfLandingGearAssemblies = GetInteger(0, 20);
+            Console.Write("Manufacturer: ");
+            aircraftDTO.Manufacturer = Console.ReadLine();
+            Console.Write("Model: ");
+            aircraftDTO.Model = Console.ReadLine();
+            Console.Write("Type designator: ");
+            aircraftDTO.TypeDesignator = Console.ReadLine();
+            Console.WriteLine("Type description: " + GetTypeString(aircraftTypes));
+            aircraftDTO.AircraftType = (AircraftType)GetInteger(0, 5);
+            Console.WriteLine("Engine type: " + GetTypeString(aircraftEngineTypes));
+            aircraftDTO.EngineType = (AircraftEngineType)GetInteger(0, 5);
+            Console.Write("Engine count: ");
+            aircraftDTO.EngineCount = GetInteger(0, 16);
+        }
+
+        public string GetTypeString(string[] typeStrings)
+        {
+
+            string v = "";
+            var lastElement = typeStrings.Length - 1;
+            for (int i = 0; i < lastElement; i++)
+            {
+                v = string.Concat(v, i + ": " + typeStrings[i] + ", ");
+            }
+            v = string.Concat(v, lastElement + ": " + typeStrings[lastElement]);
+            return v;
+        }
+
+        public static int GetInteger(int min, int max)
         {
             int result = 0;
             string input;

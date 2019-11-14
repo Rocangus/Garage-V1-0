@@ -83,15 +83,6 @@ namespace GarageManagementSoftware
             else return false;
         }
 
-        private bool ParkAircraft(string[] input)
-        {
-            Aircraft vehicle;
-            if (VehicleCreator.CreateAircraft(input, out vehicle)&&garage.ParkVehicle(vehicle))
-                return true;
-            else
-                return false;
-        }
-
         public static bool CreateAircraft(string[] input, out Aircraft vehicle)
         {
             vehicle = null;

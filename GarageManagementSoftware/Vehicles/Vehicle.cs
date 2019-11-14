@@ -7,6 +7,7 @@ namespace GarageManagementSoftware.Vehicles
     public abstract class Vehicle
     {
         public string RegistrationNumber { get; protected set; }
+
         public string Color { get; protected set; }
         public int NumberOfWheels { get; protected set; }
         public int EmptyMass { get; set; }
