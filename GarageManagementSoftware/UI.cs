@@ -32,6 +32,7 @@ namespace GarageManagementSoftware
         {
             PrintWelcomeMessage();
             string input;
+            string registrationNumber;
             do
             {
                 PrintMenuOptions();
@@ -59,6 +60,8 @@ namespace GarageManagementSoftware
                         builder.Append(GetTypeString(vehicleTypes));
                         Console.WriteLine(builder.ToString());
                         int typeChoice = GetInteger(0, 4);
+                        string color;
+                        int emptyMass;
                         if (typeChoice == 0)
                         {
                             AircraftDTO aircraftDTO = new AircraftDTO();
@@ -67,37 +70,71 @@ namespace GarageManagementSoftware
                             if (VehicleCreator.CreateAircraft(aircraftDTO, out aircraft))
                             {
                                 if (handler.ParkVehicle(aircraft))
-                                    Console.WriteLine($"Vehicle {aircraft.RegistrationNumber} created and parked!");
+                                    AnnounceParkingSuccess(aircraft.RegistrationNumber);
                             }
                         }
                         else if (typeChoice == 3)
                         {
 
-                            Console.WriteLine(GetTypeString(propulsionTypes);
+                            GetBasicProperties(out registrationNumber, out color, out emptyMass);
+                            int numberOfWheels = GetNumberOfWheels();
+                            Console.WriteLine(GetTypeString(propulsionTypes));
                             int propulsionType = GetInteger(0, 6);
+                            var carArgs = Tuple.Create(registrationNumber, color, emptyMass, numberOfWheels, (CarPropulsionType)propulsionType);
+                            Car car;
+                            if (VehicleCreator.CreateCar(carArgs, out car))
+                            {
+                                if (handler.ParkVehicle(car))
+                                    AnnounceParkingSuccess(registrationNumber);
+                            }
                         }
                         else
                         {
                             PropertyInfo[] vehicleProperties = VehicleProperties.GetProperties(typeChoice);
                             Console.WriteLine(vehicleProperties[0].PropertyType.FullName);
-                            if (vehicleProperties[0].PropertyType.IsAssignableFrom(str))
-                            {
-                                Console.WriteLine("Can be assigned as a string.");
-                            }
+                            GetBasicProperties(out registrationNumber, out color, out emptyMass);
                             if (vehicleProperties[0].PropertyType.IsAssignableFrom(integer))
                             {
-                                Console.WriteLine("Can be assigned as an integer.");
+                                int numberOfWheels = GetNumberOfWheels();
+                                Console.WriteLine("Specify cylinder volume (motorcycle) or passenger capacity (bus).");
+                                var passengersOrCylinderVolume = GetInteger(0, 10000);
+                                var busAndMotorcycleParameters = new BusAndMotorcycleParameters(registrationNumber, color, emptyMass, numberOfWheels, passengersOrCylinderVolume);
+                                if (typeChoice == 2)
+                                {
+                                    Bus bus;
+                                    if (VehicleCreator.CreateBus(busAndMotorcycleParameters, out bus))
+                                    {
+                                        if (handler.ParkVehicle(bus))
+                                            AnnounceParkingSuccess(registrationNumber);
+                                    }
+                                }
+                                if (typeChoice == 4)
+                                {
+                                    Motorcycle motorcycle;
+                                    if (VehicleCreator.CreateMotorcycle(busAndMotorcycleParameters, out motorcycle))
+                                    {
+                                        if (handler.ParkVehicle(motorcycle))
+                                            AnnounceParkingSuccess(registrationNumber);
+                                    }
+                                }
                             }
                             if (vehicleProperties[0].PropertyType.IsAssignableFrom(dec))
                             {
-                                Console.WriteLine("Can be assigned as a decimal number.");
+                                Console.Write("Length in meters: ");
+                                var length = GetDecimal(0, 2000);
+                                var boatArguments = new Tuple<string, string, int, decimal>(registrationNumber, color, emptyMass, length);
+                                Boat boat;
+                                if (VehicleCreator.CreateBoat(boatArguments, out boat))
+                                {
+                                    if (handler.ParkVehicle(boat))
+                                        AnnounceParkingSuccess(registrationNumber);
+                                }
                             }
                         }
-                        // ToDo: Figure out how to process the PropertyInfo array to get the right user input
                         break;
                     case "5":
                         Console.WriteLine("Please specify a registration number to unpark:");
-                        var registrationNumber = Console.ReadLine();
+                        registrationNumber = Console.ReadLine();
                         if (handler.UnparkVehicle(registrationNumber))
                             Console.WriteLine($"Vehicle {registrationNumber} unparked.");
                         else
@@ -107,6 +144,28 @@ namespace GarageManagementSoftware
                         break;
                 }
             } while (!input.ToLower().StartsWith("q"));
+        }
+
+        private static int GetNumberOfWheels()
+        {
+            Console.Write("Number of wheels: ");
+            var numberOfWheels = GetInteger(0, 20);
+            return numberOfWheels;
+        }
+
+        private static void AnnounceParkingSuccess(string registrationNumber)
+        {
+            Console.WriteLine($"Vehicle {registrationNumber} created and parked!");
+        }
+
+        private static void GetBasicProperties(out string registrationNumber, out string color, out int emptyMass)
+        {
+            Console.Write("Registration number: ");
+            registrationNumber = Console.ReadLine();
+            Console.Write("Color: ");
+            color = Console.ReadLine();
+            Console.Write("Empty mass in kilograms:");
+            emptyMass = GetInteger(0, int.MaxValue);
         }
 
         private void PopulateAircraftDTO(AircraftDTO aircraftDTO)
@@ -160,6 +219,24 @@ namespace GarageManagementSoftware
                     break;
                 }
                 Console.WriteLine($"Please enter an integer, minimum {min}, maximum {max}.");
+            }
+            return result;
+        }
+
+        public static decimal GetDecimal(int min, int max)
+        {
+            decimal result = 0;
+            string input;
+            bool done = false;
+            while (!done)
+            {
+                input = Console.ReadLine();
+                if (decimal.TryParse(input, out result) && result >= min && result <= max)
+                {
+                    done = true;
+                    break;
+                }
+                Console.WriteLine($"Please enter a decimal number, minimum {min}, maximum {max}.");
             }
             return result;
         }

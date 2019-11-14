@@ -104,46 +104,9 @@ namespace GarageManagementSoftware
             return true;
         }
 
-        private bool ParkBoat(string[] input)
-        {
-            if (input.Length != 5)
-            {
-                errorMessages.Add($"To park a boat you need to specify 5 values. {input.Length} values were found.");
-                return false;
-            }
-            int emptyMass;
-            decimal length;
-            if (!decimal.TryParse(input[4], out length) || !int.TryParse(input[3], out emptyMass))
-            {
-                errorMessages.Add("Please make sure to enter numbers where requested.");
-                return false;
-            }
-            var vehicle = new Boat(input[1], input[2], emptyMass, length);
-            if (garage.ParkVehicle(vehicle))
-                return true;
-            else
-                return false;
-        }
+        
 
-        private bool ParkBus(string[] input)
-        {
-            if (input.Length != 6)
-            {
-                errorMessages.Add($"To park a bus you need to specify 6 values. {input.Length} values were found.");
-                return false;
-            }
-            int numberOfWheels, emptyMass, passengerCapacity;
-            if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass) || !int.TryParse(input[5], out passengerCapacity))
-            {
-                errorMessages.Add("Please make sure to enter numbers where requested.");
-                return false;
-            }
-            var vehicle = new Bus(input[1], input[2], numberOfWheels, emptyMass, passengerCapacity);
-            if (garage.ParkVehicle(vehicle))
-                return true;
-            else
-                return false;
-        }
+        
 
         private bool ParkCar(string[] input)
         {
