@@ -130,6 +130,16 @@ namespace GarageManagementSoftware
                 return false;
         }
 
+        internal List<Vehicle> GetVehicles()
+        {
+            var vehicles = new List<Vehicle>();
+            foreach (var vehicle in garage)
+            {
+                vehicles.Add(vehicle);
+            }
+            return vehicles;
+        }
+
         private bool ParkMotorcycle(string[] input)
         {
             if (input.Length != 6)
