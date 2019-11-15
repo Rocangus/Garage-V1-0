@@ -87,5 +87,24 @@ namespace GarageManagementSoftware
         {
             return GetEnumerator();
         }
+
+        internal void SetCapacity(int v)
+        {
+            if (v > vehicles.Length)
+            {
+                IncreaseBackingArraySize(v);
+            }
+            Capacity = v;
+        }
+
+        private void IncreaseBackingArraySize(int v)
+        {
+            var temp = new Vehicle[v];
+            for (int i = 0; i < Count; i++)
+            {
+                temp[i] = vehicles[i];
+            }
+            vehicles = temp;
+        }
     }
 }

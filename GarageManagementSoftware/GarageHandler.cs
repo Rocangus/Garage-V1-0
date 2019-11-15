@@ -104,9 +104,10 @@ namespace GarageManagementSoftware
             return true;
         }
 
-        
-
-        
+        internal void SetCapacity(int v)
+        {
+            garage.SetCapacity(v);
+        }
 
         private bool ParkCar(string[] input)
         {
@@ -256,6 +257,11 @@ namespace GarageManagementSoftware
                 return garage.UnparkVehicle(vehicle);
             else
                 return false;
-        } 
+        }
+
+        internal bool GarageExists()
+        {
+            return garage != null;
+        }
     }
 }
