@@ -1,6 +1,8 @@
 ﻿using GarageManagementSoftware.Vehicles;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace GarageManagementSoftware
@@ -10,9 +12,15 @@ namespace GarageManagementSoftware
 
         public static List<string> errorMessages = new List<string>();
         private Garage<Vehicle> garage;
+        private Dictionary<string, Type> vehicleTypes;
         public GarageHandler()
         {
-            
+            vehicleTypes = new Dictionary<string, Type>();
+            vehicleTypes["Aircraft"] = typeof(Aircraft);
+            vehicleTypes["Boat"] = typeof(Boat);
+            vehicleTypes["Bus"] = typeof(Bus);
+            vehicleTypes["Car"] = typeof(Car);
+            vehicleTypes["Motorcycle"] = typeof(Motorcycle);
         }
 
         public void SetGarage(Garage<Vehicle> newGarage)
@@ -28,9 +36,9 @@ namespace GarageManagementSoftware
 
         public int GetGarageCapacity()
         {
-            if (garage == null) 
+            if (garage == null)
                 return -1;
-            else 
+            else
                 return garage.Capacity;
         }
 
@@ -148,7 +156,7 @@ namespace GarageManagementSoftware
                 return false;
             }
             int numberOfWheels, emptyMass, cylinderVolume;
-            if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass)||!int.TryParse(input[5], out cylinderVolume))
+            if (!int.TryParse(input[3], out numberOfWheels) || !int.TryParse(input[4], out emptyMass) || !int.TryParse(input[5], out cylinderVolume))
             {
                 errorMessages.Add("Please make sure to enter numbers where requested.");
                 return false;
@@ -272,6 +280,68 @@ namespace GarageManagementSoftware
         internal bool GarageExists()
         {
             return garage != null;
+        }
+
+        internal bool LoadGarageFromFile()
+        {
+            using (StreamReader sr = File.OpenText("garage.txt"))
+            {
+                var capacity = ReadSecondPartOfLineAsInt(sr);
+                var vehicleCount = ReadSecondPartOfLineAsInt(sr);
+                for (int i = 0; i < vehicleCount; i++)
+                {
+                    var typeString = sr.ReadLine();
+                    var properties = vehicleTypes[typeString].GetProperties();
+                    if (properties.Length == 10)
+                    {
+                        var dTO = new AircraftDTO();
+                        populateDTO(dTO, properties);
+                    }
+                    foreach (var property in properties)
+                    {
+                        if (property.PropertyType.IsAssignableFrom(UI.typeInteger))
+                            ReadSecondPartOfLineAsInt(sr);
+
+                    }
+                }
+                return true;
+            }
+        }
+
+        private void populateDTO(AircraftDTO dTO, PropertyInfo[] properties)
+        {
+            
+        }
+
+        private static int ReadSecondPartOfLineAsInt(StreamReader sr)
+        {
+            return int.Parse(sr.ReadLine().Split(":")[1]);
+        }
+
+        internal bool SaveGarageToFile()
+        {
+            using (StreamWriter sw = File.CreateText("garage.txt"))
+            {
+                try
+                {
+                    sw.WriteLine($"Garage Capacity:{garage.Capacity}");
+                    sw.WriteLine($"Vehicle Count:{garage.Count}");
+                    foreach (var vehicle in garage)
+                    {
+                        sw.WriteLine(vehicle.GetType().Name);
+                        foreach (var property in vehicle.GetType().GetProperties())
+                        {
+                            sw.WriteLine($"{property.Name}:{property.GetValue(vehicle)}");
+                        }
+                    }
+                    return true;
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Console.Error.WriteLine(e.Message);
+                    return false;
+                }
+            }
         }
     }
 }

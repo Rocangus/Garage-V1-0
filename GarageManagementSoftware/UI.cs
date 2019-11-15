@@ -14,9 +14,9 @@ namespace GarageManagementSoftware
         private string[] aircraftTypes;
         private string[] aircraftEngineTypes;
         private string[] propulsionTypes;
-        private Type typeVehicle = typeof(Vehicle);
-        private Type typeInteger = typeof(int);
-        private Type typeDecimal = typeof(decimal);
+        internal static Type typeVehicle = typeof(Vehicle);
+        internal static Type typeInteger = typeof(int);
+        internal static Type typeDecimal = typeof(decimal);
         private bool keepAlive = true;
 
         public UI()
@@ -82,6 +82,10 @@ namespace GarageManagementSoftware
                     case "8":
                         if (GarageExists())
                             SearchByRegistrationNumber();
+                        break;
+                    case "9":
+                        if (GarageExists())
+                            handler.SaveGarageToFile();
                         break;
                     default:
                         Console.WriteLine("Unrecognized command.");
@@ -514,6 +518,7 @@ namespace GarageManagementSoftware
             Console.WriteLine("6. Set the capacity of the garage.");
             Console.WriteLine("7. List vehicles based on properties (number of wheels etc).");
             Console.WriteLine("8. Search for a vehicle by registration number.");
+            Console.WriteLine("9: Save the garage to file.");
             Console.WriteLine("Q: Quit the program.");
         }
     }
