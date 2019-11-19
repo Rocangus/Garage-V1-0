@@ -280,9 +280,21 @@ namespace GarageManagementSoftware
 
         private void CreateGarage()
         {
+            if (GarageExists())
+            {
+                WarnUserOfOverwritingGarage();
+                if (!Console.ReadLine().ToLower().StartsWith("yes"))
+                    return;
+            }
             Console.WriteLine("Please enter the capacity of the garage.");
             int capacity = GetInteger(0, 1024);
             handler.NewGarage(capacity);
+        }
+
+        private void WarnUserOfOverwritingGarage()
+        {
+            Console.WriteLine("A garage is already loaded. Creating a new one will overwrite the current garage.");
+            Console.Write("To continue, write 'yes' and press enter: ");
         }
 
         private void ListAllVehicles()
