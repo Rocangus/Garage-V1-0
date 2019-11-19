@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -180,6 +181,13 @@ namespace GarageManagementSoftware
 
         private Dictionary<string, int> PopulateTypeCountDictionary()
         {
+            //var res = garage.GroupBy(v => v.GetType().Name)
+            //                .Select(v => new
+            //                {
+            //                    TypeName = v.Key,
+            //                    Sum = v.Count()
+            //                });
+
             var vehicleTypeCounts = new Dictionary<string, int>();
             foreach (var vehicle in garage)
             {
@@ -268,6 +276,7 @@ namespace GarageManagementSoftware
 
         public bool UnparkVehicle(string registrationNumber) // Needs testing
         {
+          //  var vehicle = garage?.FirstOrDefault(v => v.RegistrationNumber == registrationNumber);
             if (garage == null)
                 return false;
             Vehicle vehicle;

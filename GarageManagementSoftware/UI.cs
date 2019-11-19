@@ -182,7 +182,7 @@ namespace GarageManagementSoftware
                     propertiesWithValues[item] = GetInteger(0, int.MaxValue);
                     continue;
                 }
-                propertiesWithValues[item] = Console.ReadLine();
+                propertiesWithValues[item] = Console.ReadLine().ToLower();
             }
         }
 
@@ -335,9 +335,9 @@ namespace GarageManagementSoftware
         private static void GetBasicProperties(out string registrationNumber, out string color, out int emptyMass)
         {
             Console.Write("Registration number: ");
-            registrationNumber = Console.ReadLine();
+            registrationNumber = Console.ReadLine().ToLower();
             Console.Write("Color: ");
-            color = Console.ReadLine();
+            color = Console.ReadLine().ToLower();
             Console.Write("Empty mass in kilograms:");
             emptyMass = GetInteger(0, int.MaxValue);
         }
@@ -345,19 +345,19 @@ namespace GarageManagementSoftware
         private void PopulateAircraftDTO(AircraftDTO aircraftDTO)
         {
             Console.Write("Registration number: ");
-            aircraftDTO.RegistrationNumber = Console.ReadLine();
+            aircraftDTO.RegistrationNumber = Console.ReadLine().ToLower();
             Console.Write("Color or livery: ");
-            aircraftDTO.ColorOrLivery = Console.ReadLine();
+            aircraftDTO.ColorOrLivery = Console.ReadLine().ToLower();
             Console.Write("Empty mass in kilograms: ");
             aircraftDTO.EmptyMass = GetInteger(0, int.MaxValue);
             Console.Write("Number of landing gear assemblies: ");
             aircraftDTO.NumberOfLandingGearAssemblies = GetInteger(0, 20);
             Console.Write("Manufacturer: ");
-            aircraftDTO.Manufacturer = Console.ReadLine();
+            aircraftDTO.Manufacturer = Console.ReadLine().ToLower();
             Console.Write("Model: ");
-            aircraftDTO.Model = Console.ReadLine();
+            aircraftDTO.Model = Console.ReadLine().ToLower();
             Console.Write("Type designator: ");
-            aircraftDTO.TypeDesignator = Console.ReadLine();
+            aircraftDTO.TypeDesignator = Console.ReadLine().ToUpper();
             Console.WriteLine("Type description: " + GetTypeString(aircraftTypes));
             aircraftDTO.AircraftType = (AircraftType)GetInteger(0, 5);
             Console.WriteLine("Engine type: " + GetTypeString(aircraftEngineTypes));
